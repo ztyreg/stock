@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Checkbox} from 'antd';
 import {Radio} from 'antd';
+import {Badge} from 'antd';
 import {Table} from 'antd';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -15,6 +16,8 @@ class App extends Component {
         data: [],
         loading: false,
         lang: 0,
+        showRed: true,
+        showYellow: true,
     };
 
     fetch = () => {
@@ -41,6 +44,18 @@ class App extends Component {
         });
     };
 
+    handleShowRedChange = (e) => {
+        this.setState({
+            showRed: e.target.checked
+        })
+    };
+
+    handleShowYellowChange = (e) => {
+        this.setState({
+            showYellow: e.target.checked
+        })
+    };
+
     render() {
         const columns = [
             {
@@ -59,7 +74,23 @@ class App extends Component {
             {
                 title: 'Home Team',
                 dataIndex: 'home',
-                render: home => <span>{home[this.state.lang]}</span>,
+                render: (home, record) => <div>
+                    <Badge className={"mr-1"} count={record.homeYellow} style={{
+                        display: this.state.showYellow ? 'block' : 'none',
+                        borderRadius: 0,
+                        backgroundColor: 'yellow',
+                        color: '#999',
+                        boxShadow: '0 0 0 1px #d9d9d9 inset'
+                    }}/>
+                    <Badge className={"mr-1"} count={record.homeRed} style={{
+                        display: this.state.showRed ? 'block' : 'none',
+                        borderRadius: 0,
+                        backgroundColor: 'red',
+                        color: '#999',
+                        boxShadow: '0 0 0 1px #d9d9d9 inset'
+                    }}/>
+                    <span>{home[this.state.lang]}</span>
+                </div>
             },
             {
                 title: 'Score',
@@ -69,7 +100,23 @@ class App extends Component {
             {
                 title: 'Guest Team',
                 dataIndex: 'guest',
-                render: guest => <span>{guest[this.state.lang]}</span>,
+                render: (home, record) => <div>
+                    <span>{home[this.state.lang]}</span>
+                    <Badge className={"ml-1"} count={record.guestRed} style={{
+                        display: this.state.showRed ? 'block' : 'none',
+                        borderRadius: 0,
+                        backgroundColor: 'red',
+                        color: '#999',
+                        boxShadow: '0 0 0 1px #d9d9d9 inset'
+                    }}/>
+                    <Badge className={"ml-1"} count={record.guestYellow} style={{
+                        display: this.state.showYellow ? 'block' : 'none',
+                        borderRadius: 0,
+                        backgroundColor: 'yellow',
+                        color: '#999',
+                        boxShadow: '0 0 0 1px #d9d9d9 inset'
+                    }}/>
+                </div>
             },
             {
                 title: 'Half score',
@@ -77,6 +124,7 @@ class App extends Component {
                 render: (value, record) => <span>{record.homeHalfScore} - {record.guestHalfScore}</span>,
             }
         ];
+
         return (
             <div className="App">
                 <nav className="navbar navbar-light bg-light">
@@ -87,8 +135,10 @@ class App extends Component {
 
                 <div className="container mt-3">
                     <div className="filter my-3">
-                        <Checkbox>Show Red</Checkbox>
-                        <Checkbox>Show Yellow</Checkbox>
+                        <Checkbox checked={this.state.showRed} onChange={this.handleShowRedChange}>Show
+                            Red</Checkbox>
+                        <Checkbox checked={this.state.showYellow} onChange={this.handleShowYellowChange}>Show
+                            Yellow</Checkbox>
 
                         <RadioGroup defaultValue="0" onChange={this.handleLangChange}>
                             <RadioButton value={0}>field1</RadioButton>
