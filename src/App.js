@@ -12,6 +12,9 @@ import reqwest from 'reqwest';
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 
+const SubMenu = Menu.SubMenu;
+const MenuItemGroup = Menu.ItemGroup;
+
 
 class App extends Component {
     state = {
@@ -34,6 +37,10 @@ class App extends Component {
                 data: data.results,
             });
         });
+    };
+
+    handleClick = e => {
+        console.log('click ', e);
     };
 
     componentDidMount() {
@@ -70,7 +77,8 @@ class App extends Component {
             switch (type) {
                 case 'homeScore':
                     currentMatch.homeScore++;
-                    msg = <span> <b className={"text-danger"}>{currentMatchHome} {currentMatch.homeScore}</b> : {currentMatch.guestScore} {currentMatchGuest} </span>;
+                    msg = <span> <b className={"text-danger"}>{currentMatchHome} {currentMatch.homeScore}</b>
+                    : {currentMatch.guestScore} {currentMatchGuest} </span>;
                     message.success(msg, 10);
                     break;
 
@@ -80,6 +88,7 @@ class App extends Component {
             })
         }
     };
+
 
     render() {
         const columns = [
@@ -173,12 +182,38 @@ class App extends Component {
         ];
 
         return (
+
             <div className="App">
-                <nav className="navbar navbar-light bg-light">
-                    <div className="container">
-                        <a className="navbar-brand" href="/">Stock Price</a>
+
+                <nav className="navbar navbar-expand-lg navbar-light bg-light">
+                    <a className="navbar-brand" href="/">Online Stock Trading Information</a>
+                    <button className="navbar-toggler" type="button" data-toggle="collapse"
+                            data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false"
+                            aria-label="Toggle navigation">
+                        <span className="navbar-toggler-icon"/>
+                    </button>
+                    <button className="navbar-toggler" type="button" data-toggle="collapse"
+                            data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span className="navbar-toggler-icon"/>
+                    </button>
+
+                    <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
+                        <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
+                            <li className="nav-item active">
+                                <a className="nav-link" href="#">Home<span className="sr-only">(current)</span></a>
+                            </li>
+                            <li className="nav-item">
+                                <a className="nav-link" href="#">Account</a>
+                            </li>
+                        </ul>
+                        <form className="form-inline my-2 my-lg-0">
+                            <input className="form-control mr-sm-2" type="search" placeholder="Search"/>
+                            <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                        </form>
                     </div>
                 </nav>
+
 
                 <div className="container mt-3">
                     <div className="filter my-3">
