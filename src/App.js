@@ -3,6 +3,8 @@ import {Checkbox} from 'antd';
 import {Radio} from 'antd';
 import {Badge} from 'antd';
 import {Table} from 'antd';
+import {Dropdown, Menu, Icon} from 'antd';
+import {message} from 'antd';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import reqwest from 'reqwest';
@@ -54,6 +56,29 @@ class App extends Component {
         this.setState({
             showYellow: e.target.checked
         })
+    };
+
+    handleOperation = (type, matchId) => {
+        // message.success('This is a prompt message for success, and it will disappear in 10 seconds', 10);
+        let foundIndex = this.state.data.findIndex(x => x.matchId === matchId);
+        if (foundIndex !== -1) {
+            // message.success(foundIndex, 10)
+            let currentMatch = this.state.data[foundIndex];
+            let currentMatchHome = currentMatch.home[this.state.lang];
+            let currentMatchGuest = currentMatch.guest[this.state.lang];
+            let msg = '';
+            switch (type) {
+                case 'homeScore':
+                    currentMatch.homeScore++;
+                    msg = <span> <b className={"text-danger"}>{currentMatchHome} {currentMatch.homeScore}</b> : {currentMatch.guestScore} {currentMatchGuest} </span>;
+                    message.success(msg, 10);
+                    break;
+
+            }
+            this.setState({
+                data: this.state.data
+            })
+        }
     };
 
     render() {
@@ -122,6 +147,28 @@ class App extends Component {
                 title: 'Half score',
                 dataIndex: 'halfScore',
                 render: (value, record) => <span>{record.homeHalfScore} - {record.guestHalfScore}</span>,
+            },
+            {
+                title: 'Simulation',
+                dataIndex: 'operation',
+                render: (value, record) =>
+                    <Dropdown
+                        overlay={
+                            <Menu>
+                                <Menu.Item key="0">
+                                    <a onClick={e => this.handleOperation("homeScore", record.matchId)}>home score</a>
+                                </Menu.Item>
+                                <Menu.Item key="1">
+                                    <a onClick={e => this.handleOperation(record.matchId)}>guest score</a>
+                                </Menu.Item>
+                                <Menu.Divider/>
+                                <Menu.Item key="3">3rd menu item</Menu.Item>
+                            </Menu>}
+                        trigger={['click']}>
+                        <a className="ant-dropdown-link">
+                            Simulation<Icon type="down"/>
+                        </a>
+                    </Dropdown>,
             }
         ];
 
