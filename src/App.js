@@ -4,44 +4,74 @@ import {Radio} from 'antd';
 import {Table} from 'antd';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
+import reqwest from 'reqwest';
 
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 
-const dataSource = [
-    {
-        key: '1',
-        name: '胡彦斌',
-        age: 32,
-        address: '西湖区湖底公园1号',
-    },
-    {
-        key: '2',
-        name: '胡彦祖',
-        age: 42,
-        address: '西湖区湖底公园1号',
-    },
-];
-
 const columns = [
     {
-        title: '姓名',
-        dataIndex: 'name',
-        key: 'name',
+        title: 'Match',
+        dataIndex: 'league[0]',
+        key: 'league',
     },
     {
-        title: '年龄',
-        dataIndex: 'age',
-        key: 'age',
+        title: 'Time',
+        dataIndex: 'matchTime',
+        render: (value, record) =>
+        <span title={record.matchYear + "-" + record.matchDate + " " + record.matchTime}>
+            {record.matchDate + " " + record.matchTime}
+        </span>,
+        key: 'matchTime',
     },
     {
-        title: '住址',
-        dataIndex: 'address',
-        key: 'address',
+        title: 'Home Team',
+        dataIndex: 'home[0]',
+        key: 'home',
     },
+    {
+        title: 'Score',
+        dataIndex: 'score',
+        render: (value, record) => <span>{record.homeScore} - {record.guestScore}</span>,
+        key: 'score',
+    },
+    {
+        title: 'Guest Team',
+        dataIndex: 'guest[0]',
+        key: 'guest',
+    },
+    {
+        title: 'Half score',
+        dataIndex: 'halfScore',
+        key: 'halfScore',
+        render: (value, record) => <span>{record.homeHalfScore} - {record.guestHalfScore}</span>,
+    }
 ];
 
 class App extends Component {
+    state = {
+        data: [],
+        loading: false,
+    };
+
+    fetch = () => {
+        this.setState({ loading: true });
+        reqwest({
+            url: '/worldcup_2018.json',
+            method: 'get',
+            type: 'json',
+        }).then(data => {
+            this.setState({
+                loading: false,
+                data: data.results,
+            });
+        });
+    };
+
+    componentDidMount() {
+        this.fetch();
+    }
+
     render() {
         return (
             <div className="App">
@@ -63,7 +93,14 @@ class App extends Component {
                         </RadioGroup>
                     </div>
 
-                    <Table dataSource={dataSource} columns={columns} size={"middle"} pagination={false}/>
+                    <Table
+                    dataSource={this.state.data}
+                    columns={columns}
+                    size={"middle"}
+                    pagination={false}
+                    rowKey={record => record.matchId}
+                    loading={this.state.loading}
+                    />
 
                 </div>
 
