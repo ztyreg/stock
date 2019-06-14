@@ -1,0 +1,20 @@
+{
+  "results": [
+    {
+      "key": "1",
+      "SellOrBuy": "SELL",
+      "stockID": "111",
+      "number": "50",
+      "time": "XXXXXX",
+      "states": "交易成功"
+    },
+    {
+      "key": "2",
+      "SellOrBuy": "BUY",
+      "stockID": "222",
+      "number": "50",
+      "time": "YYYYYY",
+      "states": "交易中"
+    }
+  ]
+}
