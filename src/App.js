@@ -366,8 +366,19 @@ class PanelStockdealInformation extends Component {
         }).then(data => {
             this.setState({
                 loading: false,
-                data: data.results,
+                data: this.state.data.concat(data.results),
             });
+        });
+        reqwest({
+            url: '/deal_add.json',
+            method: 'get',
+            type: 'json',
+        }).then(data => {
+            this.setState({
+                loading: false,
+                data: this.state.data.concat(data.results),
+            });
+
         });
     };
 
