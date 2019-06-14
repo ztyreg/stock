@@ -5,7 +5,7 @@
       "SellOrBuy": "SELL",
       "stockID": "111",
       "number": "50",
-      "time": "XXXXXX",
+      "time": "XXXXXXa",
       "states": "交易成功"
     },
     {
@@ -13,7 +13,7 @@
       "SellOrBuy": "BUY",
       "stockID": "222",
       "number": "50",
-      "time": "YYYYYY",
+      "time": "YYYYYYa",
       "states": "交易中"
     }
   ]
