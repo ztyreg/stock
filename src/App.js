@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Table, Menu, Icon, Button, Input, Layout, Breadcrumb, Modal,Card} from 'antd';
+import {Table, Menu, Icon, Button, Input, Layout, Breadcrumb, Modal, Card} from 'antd';
 import {BrowserRouter as Router, Route, Link} from "react-router-dom";
 import Highlighter from 'react-highlight-words';
 import ReactEcharts from 'echarts-for-react';
@@ -123,6 +123,7 @@ class ResultTable extends Component {
         return <Table columns={columns} dataSource={this.props.data}/>;
     }
 }
+
 class ResultTable_deal extends Component {
     constructor(props) {
         super(props);
@@ -196,10 +197,10 @@ class ResultTable_deal extends Component {
         const columns = [
             {
                 title: 'Key',
-                dataIndex: 'Key',
-                key: 'Key',
+                dataIndex: 'key',
+                key: 'key',
                 width: '20%',
-                ...this.getColumnSearchProps('Key'),
+                ...this.getColumnSearchProps('key'),
             },
             {
                 title: 'SellOrBuy',
@@ -342,6 +343,7 @@ class PanelStockInformation extends Component {
 function showPanelStockInformation() {
     return new PanelStockInformation();
 }
+
 class PanelStockdealInformation extends Component {
     constructor(props) {
         super(props);
@@ -364,8 +366,19 @@ class PanelStockdealInformation extends Component {
         }).then(data => {
             this.setState({
                 loading: false,
-                data: data.results,
+                data: this.state.data.concat(data.results),
             });
+        });
+        reqwest({
+            url: '/deal_add.json',
+            method: 'get',
+            type: 'json',
+        }).then(data => {
+            this.setState({
+                loading: false,
+                data: this.state.data.concat(data.results),
+            });
+
         });
     };
 
@@ -392,6 +405,7 @@ class PanelStockdealInformation extends Component {
 function showPanelStockdealInformation() {
     return new PanelStockdealInformation();
 }
+
 class PanelAccountInformation extends Component {
     constructor(props) {
         super(props);
@@ -442,6 +456,7 @@ class About extends Component {
 function showAbout() {
     return new About();
 }
+
 function splitData(rawData) {
     var categoryData = [];
     var values = []
@@ -454,58 +469,60 @@ function splitData(rawData) {
         values: values
     };
 }
+
 class Kline extends Component {
     constructor(props) {
         super(props);
     }
-    data0: [[ 2320.26,2320.26,2287.3,2362.94],
-    [ 2300,2291.3,2288.26,2308.38],
-    [ 2295.35,2346.5,2295.35,2346.92],
-    [ 2347.22,2358.98,2337.35,2363.8],
-    [ 2360.75,2382.48,2347.89,2383.76],
-    [ 2383.43,2385.42,2371.23,2391.82],
-    [ 2377.41,2419.02,2369.57,2421.15]
-    ]
-    data1:['周一','周二','周三','周四','周五','周六','周日']
-    getOption =()=> {
-    let option = {
-      title:{
-        text:'大盘',
-        x:'center'
-      },
-      xAxis: {
-        data: ['周一','周二','周三','周四','周五','周六','周日']
-    },
-    yAxis: {
-	min:2200
 
-	},
+    data0: [[2320.26, 2320.26, 2287.3, 2362.94],
+        [2300, 2291.3, 2288.26, 2308.38],
+        [2295.35, 2346.5, 2295.35, 2346.92],
+        [2347.22, 2358.98, 2337.35, 2363.8],
+        [2360.75, 2382.48, 2347.89, 2383.76],
+        [2383.43, 2385.42, 2371.23, 2391.82],
+        [2377.41, 2419.02, 2369.57, 2421.15]
+        ]
+    data1: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+    getOption = () => {
+        let option = {
+            title: {
+                text: '大盘',
+                x: 'center'
+            },
+            xAxis: {
+                data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+            },
+            yAxis: {
+                min: 2200
 
-    series: [{
-        type: 'k',
-        data: [[ 2320.26,2320.26,2287.3,2362.94],
-    [ 2300,2291.3,2288.26,2308.38],
-    [ 2295.35,2346.5,2295.35,2346.92],
-    [ 2347.22,2358.98,2337.35,2363.8],
-    [ 2360.75,2382.48,2347.89,2383.76],
-    [ 2383.43,2385.42,2371.23,2391.82],
-    [ 2377.41,2419.02,2369.57,2421.15]
-    ]
-    }]
+            },
+
+            series: [{
+                type: 'k',
+                data: [[2320.26, 2320.26, 2287.3, 2362.94],
+                    [2300, 2291.3, 2288.26, 2308.38],
+                    [2295.35, 2346.5, 2295.35, 2346.92],
+                    [2347.22, 2358.98, 2337.35, 2363.8],
+                    [2360.75, 2382.48, 2347.89, 2383.76],
+                    [2383.43, 2385.42, 2371.23, 2391.82],
+                    [2377.41, 2419.02, 2369.57, 2421.15]
+                ]
+            }]
+        };
+        return option
+    };
+
+    render() {
+        return (
+            <div>
+                <Card title="K线图">
+                    <ReactEcharts option={this.getOption()} theme="Imooc" style={{height: '400px'}}/>
+                </Card>
+
+            </div>
+        )
     }
-   return option
-  }
-
-  render(){
-    return(
-      <div>
-        <Card title="K线图">
-            <ReactEcharts option={this.getOption()} theme="Imooc"  style={{height:'400px'}}/>
-        </Card>
-
-      </div>
-    )
-  }
 }
 
 function showKline() {
@@ -514,36 +531,7 @@ function showKline() {
 
 class App extends Component {
 
-    /* this function is passed to ResultTable
-     * used to simulate database change
-     */
-    // handleOperation = (type, matchId) => {
-    //     // message.success('This is a prompt message for success, and it will disappear in 10 seconds', 10);
-    //     let foundIndex = this.state.data.findIndex(x => x.matchId === matchId);
-    //     if (foundIndex !== -1) {
-    //         // message.success(foundIndex, 10)
-    //         let currentMatch = this.state.data[foundIndex];
-    //         let currentMatchHome = currentMatch.home[this.state.lang];
-    //         let currentMatchGuest = currentMatch.guest[this.state.lang];
-    //         let msg = '';
-    //         switch (type) {
-    //             case 'homeScore':
-    //                 currentMatch.homeScore++;
-    //                 msg = <span> <b className={"text-danger"}>{currentMatchHome} {currentMatch.homeScore}</b>
-    //                 : {currentMatch.guestScore} {currentMatchGuest} </span>;
-    //                 message.success(msg, 10);
-    //                 break;
-    //
-    //         }
-    //         this.setState({
-    //             data: this.state.data
-    //         })
-    //     }
-    // };
-
     render() {
-        /* just enum in JS */
-        /* the pages */
         return (
             /* layout */
             <Router>
@@ -580,13 +568,13 @@ class App extends Component {
                                             <Menu.Item key="1">
                                                 <Link to={`/panel/stocks/all`}>All</Link>
                                             </Menu.Item>
-					    <Menu.Item key="6">
+                                            <Menu.Item key="6">
                                                 <Link to={`/panel/stocks/Kline`}>Kline</Link>
                                             </Menu.Item>
-					    <Menu.Item key="5">
+                                            <Menu.Item key="5">
                                                 <Link to={`/panel/stocks/deal`}>Deal</Link>
                                             </Menu.Item>
-					    
+
                                         </SubMenu>
                                         <SubMenu
                                             key="sub2"
@@ -632,7 +620,7 @@ class App extends Component {
                                     </Breadcrumb>
                                 )
                             }}/>
-			    <Route exact path="/panel/stocks/deal" component={() => {
+                            <Route exact path="/panel/stocks/deal" component={() => {
                                 return (
                                     <Breadcrumb style={{margin: '16px 0'}}>
                                         <Breadcrumb.Item>Panel</Breadcrumb.Item>
@@ -641,7 +629,7 @@ class App extends Component {
                                     </Breadcrumb>
                                 )
                             }}/>
-			    <Route exact path="/panel/stocks/Kline" component={() => {
+                            <Route exact path="/panel/stocks/Kline" component={() => {
                                 return (
                                     <Breadcrumb style={{margin: '16px 0'}}>
                                         <Breadcrumb.Item>Panel</Breadcrumb.Item>
@@ -686,8 +674,8 @@ class App extends Component {
                             >
                                 <Route exact path="/" component={showPanelStockInformation}/>
                                 <Route exact path="/panel/stocks/all" component={showPanelStockInformation}/>
-				<Route exact path="/panel/stocks/deal" component={showPanelStockdealInformation}/>
-				<Route exact path="/panel/stocks/Kline" component={showKline}/>
+                                <Route exact path="/panel/stocks/deal" component={showPanelStockdealInformation}/>
+                                <Route exact path="/panel/stocks/Kline" component={showKline}/>
                                 <Route exact path="/panel/account/info" component={showPanelAccountInformation}/>
                                 <Route exact path="/panel/account/upgrade" component={showPanelAccountUpgrade}/>
                                 <Route exact path="/about" component={showAbout}/>
