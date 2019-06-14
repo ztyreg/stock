@@ -309,7 +309,8 @@ class PanelStockInformation extends Component {
     fetch = () => {
         this.setState({loading: true});
         reqwest({
-            url: '/st_new.json',
+	//url: '/st_new.json',
+            url: 'http:/10.180.173.191:8080/TransactionManager_war_exploded/stock/all?authority=2',
             method: 'get',
             type: 'json',
         }).then(data => {
