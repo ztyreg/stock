@@ -309,8 +309,8 @@ class PanelStockInformation extends Component {
     fetch = () => {
         this.setState({loading: true});
         reqwest({
-	//url: '/st_new.json',
-            url: 'http:/10.180.173.191:8080/TransactionManager_war_exploded/stock/all?authority=2',
+	    url: '/st_new.json',
+            //url: 'http:/10.180.173.191:8080/TransactionManager_war_exploded/stock/all?authority=2',
             method: 'get',
             type: 'json',
         }).then(data => {
@@ -529,6 +529,113 @@ class Kline extends Component {
 function showKline() {
     return new Kline();
 }
+class Kline_new extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    getOption = () => {
+       var option= {
+            title: {
+                    text: '大盘交易',
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data:['最高','最低']
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        dataZoom: {
+                            yAxisIndex: 'none'
+                        },
+                        dataView: {readOnly: false},
+                        magicType: {type: ['line', 'bar']},
+                        restore: {},
+                        saveAsImage: {}
+                    }
+                },
+                xAxis:  {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: ['周一','周二','周三','周四','周五','周六','周日']
+                },
+                yAxis: {
+                    type: 'value',
+		    min:2200,
+                    axisLabel: {
+                        formatter: '{value}'
+                    }
+                },
+                series: [
+                    {
+                        name:'最高',
+                        type:'line',data:[2320.26, 2300, 2346.5, 2358.98, 2382.48, 2385.42, 2419.02],
+                        
+                        markPoint: {
+                            data: [
+                                {type: 'max', name: '最大值'},
+                                {type: 'min', name: '最小值'}
+                            ]
+                        },
+                        markLine: {
+                            data: [
+                                {type: 'average', name: '平均值'}
+                            ]
+                        }
+                    },
+                    {
+                        name:'最低',
+                        type:'line',
+                        data:[2320.26, 2291.3, 2295.35, 2347.22, 2360.75, 2383.43, 2377.41],
+                        markPoint: {
+                            data: [
+                                {name: '周最低', value: -2, xAxis: 1, yAxis: -1.5}
+                            ]
+                        },
+                        markLine: {
+                            data: [
+                                {type: 'average', name: '平均值'},
+                                [{
+                                    symbol: 'none',
+                                    x: '90%',
+                                    yAxis: 'max'
+                                }, {
+                                    symbol: 'circle',
+                                    label: {
+                                        normal: {
+                                            position: 'start',
+                                            formatter: '最大值'
+                                        }
+                                    },
+                                    type: 'max',
+                                    name: '最高点'
+                                }]
+                            ]
+                        }
+                    }
+                ]};
+        return option;
+    };
+    render(){
+        return(
+            <div>
+                <div style={{marginTop:20}}>
+                    <ReactEcharts
+                    option={this.getOption()}
+                    style={{height: '500px', width: '60%'}}
+                    />
+                </div>
+            </div>
+        )
+    }
+}
+
+function showKline_new() {
+    return new Kline_new();
+}
 
 class App extends Component {
 
@@ -572,8 +679,9 @@ class App extends Component {
                                             <Menu.Item key="6">
                                                 <Link to={`/panel/stocks/Kline`}>Kline</Link>
                                             </Menu.Item>
+
                                             <Menu.Item key="5">
-                                                <Link to={`/panel/stocks/deal`}>Deal</Link>
+                                                <Link to={`/panel/stocks/deal`}>line</Link>
                                             </Menu.Item>
 
                                         </SubMenu>
@@ -675,7 +783,7 @@ class App extends Component {
                             >
                                 <Route exact path="/" component={showPanelStockInformation}/>
                                 <Route exact path="/panel/stocks/all" component={showPanelStockInformation}/>
-                                <Route exact path="/panel/stocks/deal" component={showPanelStockdealInformation}/>
+                                <Route exact path="/panel/stocks/deal" component={showKline_new}/>
                                 <Route exact path="/panel/stocks/Kline" component={showKline}/>
                                 <Route exact path="/panel/account/info" component={showPanelAccountInformation}/>
                                 <Route exact path="/panel/account/upgrade" component={showPanelAccountUpgrade}/>
